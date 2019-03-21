@@ -20,10 +20,7 @@ def decode(bitNum, encodedMsg):
 		currentBits = encodedMsg[i:i+bitNum]
 		# translate binary to decimal ASCII code
 		asciiCode = int(currentBits, 2)
-		# if a backspace, delete last character in message string
-		if (len(decodedMessage) != 0 and asciiCode == 8):
-			decodedMessage = decodedMessage[:-1]
-		# otherwise add character to message string
+		# Add character to message string
 		decodedMessage += chr(asciiCode)
 		i += bitNum
 	# return decoded message
