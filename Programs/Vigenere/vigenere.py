@@ -1,6 +1,6 @@
 #by: Team Persia
 #
-#github: github.com/schoobydrew/cyberstorm
+#github: https://github.com/schoobydrew/cyberstorm/blob/master/Programs/Vigenere/vigenere.py
 import sys
 def encrypt(plain, key):
     cipher = ""
