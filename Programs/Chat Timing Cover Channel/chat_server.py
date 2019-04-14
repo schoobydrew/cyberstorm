@@ -9,7 +9,7 @@ ZERO = 0.025
 # time delay to denote a binary '1' (seconds)
 ONE = 0.1
 # port you want to send a message through
-PORT = 1338
+PORT = 31337
 # overt message you want to send
 MESSAGE = "This is the overt message that you want to send."
 # covert message you want to send
@@ -58,12 +58,11 @@ def start():
     s.listen(0)
     print "Listening for a connection..."
     # accept a connecting client
-    c, addr = s.accept()
-    print "Connection successful..."
-    return c, addr
-    
+    while True:
+        c, addr = s.accept()
+        send(c, addr, MESSAGE)
+        print "Connection successful..."
+
 ##### MAIN #####
 if __name__ == "__main__":
     c, addr = start()
-    # send the message
-    send(c, addr, MESSAGE)
