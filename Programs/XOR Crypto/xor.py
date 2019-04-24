@@ -1,7 +1,7 @@
 #Team - Persians
 #github.com/schoobydrew/cyberstorm
 import sys
-keyfile = "key2"
+keyfile = "key"
 def runXOR(text, key):
     xorText = ''
     for i in range(len(text)):
