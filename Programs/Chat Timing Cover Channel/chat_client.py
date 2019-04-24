@@ -61,6 +61,7 @@ def map_delays(s):
     s.close()
     print "\nDELAY    :   FREQUENCY"
     binFreq = 0
+    iterator = 0
     zeroMODE = []
     for k, v in sorted(delays.items(), key=itemgetter(1), reverse=True):
         if (binFreq < 2):
@@ -68,7 +69,10 @@ def map_delays(s):
             #the mode of 1 will be in either the first or second iteration
             zeroMODE.append(k)
             binFreq += 1
+        if iterator == 5:
+            break
         print ("%f   :   %d" % (k, v))
+        iterator += 1
     #update ONE to be the highest occuring greatest delay*.9 to give an error range
     ONE = max(zeroMODE)*errorRange
     print "setting ONE to: {}".format(ONE)
