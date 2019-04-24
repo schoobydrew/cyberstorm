@@ -12,16 +12,16 @@ from binascii import unhexlify
 SETUP = True
 
 # IP address of the server you want to connect to
-ip = '127.0.0.1'
+ip = '138.47.102.201'
 # Port at that IP address
-port = 31337
+port = 33333
 # delay of time gap that denotes a '0' binary bit
-ZERO = 0.020 # seconds
+ZERO = 0.1 # seconds
 # delay of time gap that denotes a '1' binary bit
-ONE = 0.09 # seconds
+ONE = 0.06 # seconds
 # what decimal place to round the timing of delays
 ROUND = 3
-errorRange = .75
+errorRange = .6
 ##### PROGRAM FUNCTIONS #####
 
 # function that receives the data and measures the
