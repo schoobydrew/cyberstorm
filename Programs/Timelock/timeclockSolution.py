@@ -1,6 +1,7 @@
 # Team Persian
 # Timeclock
 # Note: Please install the 'pytz' module before running this program
+# Python version - 2.7.12
 import hashlib
 from datetime import datetime
 import pytz
