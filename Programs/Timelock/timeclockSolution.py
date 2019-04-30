@@ -2,15 +2,17 @@
 # Timeclock
 # Note: Please install the 'pytz' module before running this program
 # Python version - 2.7.12
+# github: https://github.com/schoobydrew/cyberstorm/blob/master/Programs/Timelock/timeclockSolution.py
+
 import hashlib
 from datetime import datetime
 import pytz
 import select
 import sys
 
-# current_time = "2013 05 06 07 43 25"
-# epoch time for testing
-epoch_time = "1999 12 31 23 59 59"
+# Use HARDCODE variable to manually set current time
+HARDCODE = True
+current_time = "2010 06 13 12 55 34"
 
 # Function to split the string to list
 def split_string_to_int(time):
@@ -47,7 +49,8 @@ if __name__ == "__main__":
   if select.select([sys.stdin,],[],[],0.0)[0]:
     epoch_time = sys.stdin.read().lstrip().rstrip()
     # get current system time
-    current_time = datetime.now().strftime("%Y %m %d %H %M %S")
+    if HARDCODE == False:
+      current_time = datetime.now().strftime("%Y %m %d %H %M %S")
     current_timestamp = get_utc_timestamp(current_time)
     epoch_timestamp = get_utc_timestamp(epoch_time)
     current_time_check = is_summer_time(current_time)
