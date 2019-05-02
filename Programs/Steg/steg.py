@@ -12,7 +12,7 @@ HIDDEN = ""
 ENDIAN = ""
 sentinel = [0x0, 0xff, 0x0, 0x0, 0xff, 0x0]
 #retrieve Function
-def retrieve(METHOD, OFFSET, INTERVAL, WRAPPER):
+def retrieve():
     global sentinel
     source = open(WRAPPER, "rb")
     i = 0
@@ -82,6 +82,6 @@ for arg in sys.argv[1:]:
         if (arg[1] == "e"):
             ENDIAN = arg[1]
 if (ACTION == 'r'):
-    print retrieve(METHOD, OFFSET, INTERVAL, WRAPPER)
+    print retrieve()
 elif (ACTION == 's'):
     store(METHOD, OFFSET, INTERVAL, WRAPPER, HIDDEN)
