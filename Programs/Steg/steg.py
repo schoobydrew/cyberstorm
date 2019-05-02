@@ -11,6 +11,37 @@ WRAPPER = ""
 HIDDEN = ""
 ENDIAN = ""
 sentinel = [0x0, 0xff, 0x0, 0x0, 0xff, 0x0]
+#storage Function
+def store():
+    global sentinel, OFFSET, INTERVAL
+    storage = open(WRAPPER, "rb")
+    hideFile = open(HIDDEN, "rb")
+    W = bytearray(storage.read())
+    H = bytearray(hideFile.read())
+    if (METHOD == "B"):
+        i = 0
+        while (i < len(H)):
+            W[OFFSET] = H[i]
+            OFFSET += INTERVAL
+            i += 1
+        i = 0
+        while i < len(sentinel):
+            W[OFFSET] = sentinel[i]
+            OFFSET += INTERVAL
+            i += 1
+        return ''.join(W)
+    if (METHOD == "b"):
+        i = 0
+        j = 0
+        while (j < len(H)):
+            for k in range(0, 8):
+                W[i] &= 11111110
+                W[i] |= ((H[j] & 10000000) >> 7)
+                H[j] <<= 1
+                i += INTERVAL
+            j += 1
+        return ''.join(W)
+
 #retrieve Function
 def retrieve():
     global sentinel
@@ -84,4 +115,4 @@ for arg in sys.argv[1:]:
 if (ACTION == 'r'):
     print retrieve()
 elif (ACTION == 's'):
-    store(METHOD, OFFSET, INTERVAL, WRAPPER, HIDDEN)
+    print store()
