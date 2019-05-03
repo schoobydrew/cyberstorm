@@ -6,7 +6,7 @@ import datetime
 import sys
 import time
 #global for manual time entering
-currentTime = "2015 05 15 14 00 00"
+currentTime = "2017 03 23 18 02 06"
 def getTime():
     if (currentTime != ""):
         time = currentTime.split(" ")
