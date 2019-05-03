@@ -63,7 +63,7 @@ def retrieve():
             bytes += 1
             temp = source.read(1)
         source.close()
-        return dataSet
+        return dataSet[:-(len(sentinel))]
     if (METHOD == "b"):
         temp = source.read(1)
         byte = 0
@@ -93,7 +93,7 @@ def retrieve():
             bytes += 1
             temp = source.read(1)
         source.close()
-        return dataSet
+        return dataSet[:-(len(sentinel))]
 for arg in sys.argv[1:]:
         if ((arg[1] == "b") or (arg[1] == "B")):
             METHOD = arg[1]
