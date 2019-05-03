@@ -1,3 +1,6 @@
+#Team - Persians
+#https://github.com/schoobydrew/cyberstorm/edit/master/Programs/Steg/steg.py
+
 import sys
 from binascii import hexlify
 
