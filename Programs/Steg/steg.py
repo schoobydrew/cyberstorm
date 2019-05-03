@@ -13,35 +13,36 @@ ENDIAN = ""
 sentinel = [0x0, 0xff, 0x0, 0x0, 0xff, 0x0]
 #storage Function
 def store():
-    global sentinel, OFFSET, INTERVAL
-    storage = open(WRAPPER, "rb")
-    hideFile = open(HIDDEN, "rb")
-    W = bytearray(storage.read())
-    H = bytearray(hideFile.read())
-    if (METHOD == "B"):
-        i = 0
-        while (i < len(H)):
-            W[OFFSET] = H[i]
-            OFFSET += INTERVAL
-            i += 1
-        i = 0
-        while i < len(sentinel):
-            W[OFFSET] = sentinel[i]
-            OFFSET += INTERVAL
-            i += 1
-        return ''.join(W)
-    if (METHOD == "b"):
-        i = 0
-        j = 0
-        while (j < len(H)):
-            for k in range(0, 8):
-                W[i] &= 11111110
-                W[i] |= ((H[j] & 10000000) >> 7)
-                H[j] <<= 1
-                i += INTERVAL
-            j += 1
-        return ''.join(W)
-
+    global sentinel, HIDDEN, WRAPPER
+    inc = 0
+    hiddenBin = []
+    storage = []
+    hide = open(HIDDEN, "rb")
+    temp = hide.read(1)
+    while(temp != ""):
+        hiddenBin.append(ord(temp))
+        temp = hide.read(1)
+    for sent in sentinel:
+        hiddenBin.append(sent)
+    store = open(WRAPPER, "rb")
+    temp = store.read(1)
+    while(temp != ""):
+        storage.append(ord(temp))
+        temp = store.read(1)
+    for H in hiddenBin:
+        if (METHOD == "B"):
+            storage[OFFSET+INTERVAL*inc] = H
+            inc += 1
+        elif (METHOD == "b"):
+            for k in range(8):
+                storage[OFFSET+INTERVAL*inc] &= 0b11111110
+                storage[OFFSET+INTERVAL*inc] |= ((H & 0b10000000) >> 7)
+                H <<= 1
+                inc += 1
+    dataSet = ""
+    for i in storage:
+        dataSet += chr(i)
+    return dataSet
 #retrieve Function
 def retrieve():
     global sentinel
@@ -65,25 +66,33 @@ def retrieve():
         return dataSet
     if (METHOD == "b"):
         temp = source.read(1)
-        byte = ''
-        while (temp != "" and data != sentinel):
-            if (bytes == OFFSET + i*8*INTERVAL + len(byte)*INTERVAL):
-                temp = bin(ord(temp))[2:]
+        byte = 0
+        byteL = 0
+        while ((temp != "") and (data != sentinel)):
+            if (bytes == OFFSET + i*8*INTERVAL + byteL*INTERVAL):
+                temp = ord(temp)
                 #im pretty sure that endian will determine how we append bits to byte
-                ##if im the program works fine without endian
+                ##if im wrong the program works fine without endian
                 if (ENDIAN):
-                    byte = temp[len(temp)-1] + byte
+                    byte >>= 1
+                    temp &= 1
+                    temp << 7
+                    byte |= temp
                 else:
-                    byte += temp[len(temp)-1]
-                if (len(byte) == 8):
+                    byte <<= 1
+                    byte |= (temp & 1)
+                byteL += 1
+                if (byteL == 8):
                     if (len(data) == len(sentinel)):
                         data = data[1:]
-                    data.append(int(byte, 2))
-                    dataSet += chr(int(byte, 2))
-                    byte = ""
+                    data.append(byte)
+                    dataSet += chr(byte)
+                    byte = 0
+                    byteL = 0
                     i += 1
             bytes += 1
             temp = source.read(1)
+        source.close()
         return dataSet
 for arg in sys.argv[1:]:
         if ((arg[1] == "b") or (arg[1] == "B")):
@@ -112,7 +121,7 @@ for arg in sys.argv[1:]:
             #sets the hidden file
         if (arg[1] == "e"):
             ENDIAN = arg[1]
-if (ACTION == 'r'):
+if (ACTION == "r"):
     print retrieve()
-elif (ACTION == 's'):
+elif (ACTION == "s"):
     print store()
