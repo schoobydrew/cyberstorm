@@ -1,0 +1,73 @@
+listener.py and listener2.py
+
+    // Key logger
+
+    python listener.py
+
+    python listener2.py > out
+
+    // press ESC to exit
+
+controller.py and controller2.py
+
+    // Fake Types
+
+    python controller.py
+
+    python controller2.py < profile 
+
+rev.py
+
+    // Decodes long hex from reverse engineering
+    // Make sure to set password in code
+
+    python rev.py
+
+Binary.py
+
+    // Binary Decoder - handles 7 and 8 bit
+
+    python Binary.py < in > out
+
+timelock.py
+
+    // Generates password of specified format based on epoch and current time
+    // current time can be hard-coded in code, epoch time is passed in
+
+    python timelock.py < epochTime
+
+covert.py
+
+    // Logs into ftp server and decodes based on file permissions
+    // reqires set up in code
+
+    python covert.py
+    
+vigenere.py and vigenere2.py
+
+    // Decrypts or encrypts via vigenere cipher
+    // 2 requires hardcoding of alphabet
+
+    // Encryption
+    python vigenere[2].py -e key < plain
+
+    // Decryption
+    python vigenere[2].py -d key < cipher
+
+steg.py
+
+    // Pull out or store encrypted messages from files
+    // Steg shell should work now
+
+    // Store
+    python steg.py -[b|B] -s -o[offest] -i[interval] -w[wrapper] -h[hidden] > new
+
+    // Retrieve
+    python steg.py -[b|B] -r -o[offset] -i[interval] -w[wrapper] > new
+
+covert_client.py
+
+    // Decrypt a message based on timing while typing
+    // requires set up in code
+
+    python covert_client.py
