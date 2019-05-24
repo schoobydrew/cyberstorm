@@ -1,21 +1,34 @@
 #!/bin/bash
 
-method="B"                        # B for Byte || b for Bit
-offset="2**x"
-offsetUpperBound=$((2**8))                       # 1024 is what we have commonly used
-intervalFormula="2**x"            # keep the x at the end
-upperIntervalBound=$((2**8))      
-wrapper="0c947c0c57d1407bd6e2d7f1092bb057.bmp"  
+method="B"
 
-x=0
-y=0
-interval=0
-offset=0
-while [[ $offset -lt $upperIntervalBound ]] ; do
-    while [[ $interval -lt $upperIntervalBound ]] ; do
-        interval=$((${intervalFormula: :-1}$x))
-        python steg.py -$method -$action -o$offset -i$interval -w$wrapper > temp$interval
-        x=$(($x+1))
+offsetStart=1024
+offsetFormula="2**x"
+offsetEnd=$((2**16))
+
+intervalStart=1
+intervalFormula="2**x"
+intervalEnd=$((2**6))
+
+wrapper="stegged-byte.bmp"
+
+o=0
+offset=$offsetStart
+
+while [[ $offset -lt $offsetEnd ]]; do
+    offsetAdd=0
+    if [ $o -ne "0" ]; then
+        offsetAdd=$((${offsetFormula: :-1}$o))
+        offset=$(($offset*$offsetAdd))
+    fi
+    i=0
+    interval=$intervalStart
+    while [[ $interval -lt $intervalEnd ]]; do
+        intervalAdd=$((${intervalFormula: :-1}$i))
+        interval=$((interval+$intervalAdd))
+        python steg.py -$method -r -o$offset -i$interval -w$wrapper > $PWD/Dump/temp"$offset"_"$interval"
+        
+        i=$(($i+1))
     done
-    y=$(($y+1))
+    o=$((o+1))
 done
